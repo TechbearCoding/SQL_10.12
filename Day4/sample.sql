@@ -45,9 +45,9 @@ WHERE petowner.adressid = adress.AdressId;
 -- paradit dzivnieku vardus un dzivnieku saminieku vardus
 SELECT pets.petname, petowner.ownerName
 FROM pets
-INNER JOIN petowner
-ON petowner.OwnerId = pets.OwnerId;
-
+LEFT JOIN petownerpetownerpetowneradress
+ON petowner.OwnerId = pets.OwnerId
+WHERE pets.PetType = 'Kakis';
 
 -- paradit visus dzivniekus un adreses, kur vini ir
 SELECT pets.petname, adress.city, adress.street
@@ -56,7 +56,49 @@ INNER JOIN petowner
 ON petowner.OwnerId = pets.OwnerId
 INNER JOIN Adress
 ON adress.AdressId = petowner.AdressId
-WHERE pets.PetType = 'Suns';
+WHERE pets.PetType = 'Kakis';
+
+INSERT INTO Pets (PetName, PetType, PetBreed)
+VALUES 
+    ('Miks', 'Kakis', 'Persietis'),
+    ('Muris', 'Kakis', 'N/A');
+-- 8) Rediģēt vienam sunim vārdu uz "M
 
 
+CREATE TABLE Regions(
+	RegionId INT PRIMARY KEY AUTO_INCREMENT,
+    RegionName VARCHAR(15) NOT NULL
+);
 
+-- -----------------MD 
+
+ALTER TABLE adress
+ADD RegionId INT;
+
+ALTER TABLE adress
+ADD FOREIGN KEY (RegionId) REFERENCES Regions(RegionId);
+
+INSERT INTO Regions (RegionName)
+VALUES ('Kurzeme'),
+('Latgale'),
+('Vidzeme'),
+('Zemgale');
+
+UPDATE adress
+SET RegionId = 1
+WHERE AdressId = 3 OR AdressId = 4;
+
+UPDATE adress
+SET RegionId = 3
+WHERE AdressId = 1 OR AdressId = 2;
+
+
+SELECT CONCAT(petowner.ownername, ' ' ,petowner.ownerlastname) AS 'Owner name', pets.petid, pets.petname, adress.city, regions.regionname
+FROM pets
+INNER JOIN petowner
+ON petowner.OwnerId = pets.OwnerId
+INNER JOIN Adress
+ON adress.AdressId = petowner.AdressId
+INNER JOIN regions
+ON adress.regionid = regions.regionid
+WHERE adress.street like '%Ezera%';
