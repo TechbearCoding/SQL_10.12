@@ -102,3 +102,5 @@ ON adress.AdressId = petowner.AdressId
 INNER JOIN regions
 ON adress.regionid = regions.regionid
 WHERE adress.street like '%Ezera%';
+
+
